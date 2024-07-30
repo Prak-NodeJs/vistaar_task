@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Accunts.css';
 
-const Accounts = () => {
+const Accounts = ({user}) => {
   const { accountId } = useParams();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,11 @@ const Accounts = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customer/accounts/${accountId}`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customer/accounts/${accountId}`, {headers: {
+          'Authorization': `Bearer ${user.data.access_token}`,
+        },
+        withCredentials: true,
+      })
         setTransactions(response.data.data.transactions);
         setLoading(false);
       } catch (err) {
@@ -22,7 +26,7 @@ const Accounts = () => {
     };
 
     fetchTransactions();
-  }, [accountId]);
+  }, [accountId, user.data.access_token]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;

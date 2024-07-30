@@ -13,6 +13,7 @@ const registerAndLoginCustomer = async (req, res, next) => {
                profilePic:customerData?.photos[0]?.value,
                provider:customerData.provider
             }
+            
             const token = jwt.sign({newCustomer}, process.env.JWT_SCERET, {
                 expiresIn:"2h"
             })

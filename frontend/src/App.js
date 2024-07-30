@@ -13,6 +13,7 @@ function App() {
       const url = `${process.env.REACT_APP_BASE_URL}/customer/login/success`;
       const data = await axios.get(url, { withCredentials: true });
       const userData = data.data;
+      console.log(userData)
       setUser(userData);
     } catch (err) {
       console.log(err);
@@ -38,7 +39,7 @@ function App() {
         />
         <Route
           path="/accounts/:accountId"
-          element={user ? <Accounts /> : <Navigate to="/login" />}
+          element={user ? <Accounts user={user}/> : <Navigate to="/login" />}
         />
       </Routes>
     </BrowserRouter>
