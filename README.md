@@ -9,7 +9,8 @@
 
 1. Clone the repository:
     ```bash
-    git 
+    git clone https://github.com/Prak-NodeJs/vistaar_task.git
+    cd vistaar_task
     ```
 
 2. Install dependencies for the client:
