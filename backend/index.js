@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+
 console.log(__dirname)
 dotenv.config();
 
@@ -18,6 +20,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions)); 
+app.use(cookieParser());
 
 app.use(session({
   secret: process.env.SESSION_SECRET,

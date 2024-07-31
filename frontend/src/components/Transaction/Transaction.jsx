@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './Accunts.css';
+// import './Accunts.css';
 
-const Accounts = ({user}) => {
+const Transactions = () => {
   const { accountId } = useParams();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,8 +12,9 @@ const Accounts = ({user}) => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
+        const user = JSON.parse(localStorage.getItem('user'))
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customer/accounts/${accountId}`, {headers: {
-          'Authorization': `Bearer ${user.data.access_token}`,
+          'Authorization': `Bearer ${user.access_token}`,
         },
         withCredentials: true,
       })
@@ -26,7 +27,7 @@ const Accounts = ({user}) => {
     };
 
     fetchTransactions();
-  }, [accountId, user.data.access_token]);
+  }, [accountId]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -63,4 +64,4 @@ const Accounts = ({user}) => {
   );
 };
 
-export default Accounts;
+export default Transactions;

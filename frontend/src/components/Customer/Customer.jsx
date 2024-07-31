@@ -3,13 +3,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Customer.css';
 
-const Customer = ({ user }) => {
+const Customer = () => {
   const [customerData, setCustomerData] = useState([]);
   const navigate = useNavigate();
 
   const getUser = async () => {
     try {
-      const accessToken = user.data.access_token;
+      const user = JSON.parse(localStorage.getItem('user'))
+     
+      const accessToken = user.access_token;
+      console.log(accessToken)
       const url = `${process.env.REACT_APP_BASE_URL}/customer`;
       const response = await axios.get(url, {
         headers: {
@@ -17,6 +20,7 @@ const Customer = ({ user }) => {
         },
         withCredentials: true,
       });
+      console.log(accessToken)
       setCustomerData(response.data.data);
     } catch (err) {
       console.log(err);
@@ -28,7 +32,7 @@ const Customer = ({ user }) => {
   }, []);
 
   const handleAccountClick = (accountId) => {
-    navigate(`/accounts/${accountId}`);
+    navigate(`/transactions/${accountId}`);
   };
 
   return (

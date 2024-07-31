@@ -3,11 +3,10 @@ const jwt = require('jsonwebtoken')
 
 const registerAndLoginCustomer = async (req, res, next) => {
     try {
-        if(req.user){
             const customerData = req.user
             const email = customerData?.emails[0]?.value
             
-            const newCustomer = {
+            let newCustomer = {
                name:customerData.displayName,
                email,
                profilePic:customerData?.photos[0]?.value,
@@ -17,17 +16,15 @@ const registerAndLoginCustomer = async (req, res, next) => {
             const token = jwt.sign({newCustomer}, process.env.JWT_SCERET, {
                 expiresIn:"2h"
             })
-            res.status(200).json({
+
+            newCustomer.access_token= token
+           
+            res.cookie('access_token', token, { httpOnly: true }).status(200).json({
                 status:"success",
                 message:"Logged In successfully",
-                data:{access_token:token}
+                data:newCustomer
             })
-        }else{
-            res.status(401).json({
-                status:"error",
-                message:"unauthorized",
-            })
-        }
+            // res.cookie('access_token', token).redirect(process.env.CLIENT_URL)
     }
     catch (error) {
         next(error)

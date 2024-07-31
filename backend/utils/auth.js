@@ -21,6 +21,22 @@ const verifyToken = async (req, res, next)=>{
     }
 }
 
+// const verifyToken2 = (req, res, next) => {
+
+//     const token = req.cookies.access_token;
+//     console.log(token)
+//     if (!token) {
+//         throw new ApiError(401, 'unauthorized')
+//     }
+
+//     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+//         if (err) throw new ApiError(401, 'unauthorized')
+
+//         req.user = user
+//         next()
+//     })
+
+// }
 
 module.exports = {
     verifyToken

@@ -9,17 +9,10 @@ router.get('/auth/google', passport.authenticate("google", ['profile']))
 
 router.get("/auth/google/callback", passport.authenticate("google", {
     successRedirect:process.env.CLIENT_URL,
-    failureRedirect:"/v1/customer/login/failed"
+    failureRedirect:process.env.CLIENT_URL
 }))
  
 router.get("/login/success", registerAndLoginCustomer);
-
-router.get("/login/failed", (req, res)=>{
-    res.status(401).json({
-		status: 'error',
-		message: "Log in failure",
-	});
-})
 
 router.get('/', verifyToken, getCustomerDetails)
 
