@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'
-import './Header.css'
+import axios from 'axios';
+import './Header.css';
 
 const Header = () => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setUser(JSON.parse(user)); 
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  const handleLogout = async ()=>{
-    await axios.post(`${process.env.REACT_APP_BASE_URL}/customer/logout`, {}, {
-      headers: {
-        'Authorization': `Bearer ${user.access_token}`,
-      },
-      withCredentials: true,
-    });
-     localStorage.removeItem('user')
-     navigate('/login')
-     window.location.reload();
-  }
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/customer/logout`, {}, {
+        headers: {
+          'Authorization': `Bearer ${user.access_token}`,
+        },
+        withCredentials: true,
+      });
+      localStorage.removeItem('user');
+      navigate('/login');
+      window.location.reload();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   return (
     <header className="header">
@@ -48,7 +54,7 @@ const Header = () => {
                 <Link to="/transactionbelow" className="nav-link">Low Transactions</Link>
               </li>
               <li className="nav-item">
-                <button onClick={handleLogout}>Logout</button>
+                <Link to="/login" className="nav-link" onClick={handleLogout}>Logout</Link>
               </li>
             </>
           ) : (
