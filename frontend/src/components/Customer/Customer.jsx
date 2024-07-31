@@ -20,7 +20,6 @@ const Customer = () => {
         },
         withCredentials: true,
       });
-      console.log(accessToken)
       setCustomerData(response.data.data);
     } catch (err) {
       console.log(err);

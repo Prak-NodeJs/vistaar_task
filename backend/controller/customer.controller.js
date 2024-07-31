@@ -1,8 +1,10 @@
 const {Customer}  = require('../model/cutomer.model.js')
 const jwt = require('jsonwebtoken')
+const { ApiError } = require('../utils/ApiError.js')
 
 const registerAndLoginCustomer = async (req, res, next) => {
-    try {
+    try {   
+        if(req.user){
             const customerData = req.user
             const email = customerData?.emails[0]?.value
             
@@ -19,12 +21,17 @@ const registerAndLoginCustomer = async (req, res, next) => {
 
             newCustomer.access_token= token
            
-            res.cookie('access_token', token, { httpOnly: true }).status(200).json({
+            res.status(200).json({
                 status:"success",
                 message:"Logged In successfully",
                 data:newCustomer
             })
-            // res.cookie('access_token', token).redirect(process.env.CLIENT_URL)
+        }else{
+            res.status(400).json({
+                status:'error',
+                message:'unauthorized'
+            })
+        }
     }
     catch (error) {
         next(error)
@@ -55,7 +62,20 @@ const getCustomerDetails = async (req, res, next) => {
     }
 }
 
+const logout = async (req, res, next)=>{
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log("hello here")
+              throw new ApiError(500, err)
+            }      
+            res.status(200).json({ message: 'Logged out successfully' });
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
 module.exports = {
-    registerAndLoginCustomer,getCustomerDetails
+    registerAndLoginCustomer,getCustomerDetails, logout
 }

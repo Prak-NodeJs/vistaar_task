@@ -13,6 +13,8 @@ router.get("/auth/google/callback", passport.authenticate("google", {
 }))
  
 router.get("/login/success", registerAndLoginCustomer);
+router.post("/logout",verifyToken, logout);
+
 
 router.get('/', verifyToken, getCustomerDetails)
 
