@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Product.css'; // Import the CSS file for styling
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem('user'));
+     
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customer/accounts/products`, {
-          headers: {
-            'Authorization': `Bearer ${user.access_token}`,
-          },
           withCredentials: true,
         });
         setProducts(response.data.data);
@@ -23,6 +21,10 @@ const Products = () => {
         setLoading(false);
       }
     };
+    const user = JSON.parse(localStorage.getItem('user'));
+    if(!user){
+     navigate('/login')
+    }
 
     fetchProducts();
   }, []);

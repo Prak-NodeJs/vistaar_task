@@ -8,16 +8,9 @@ const Customer = () => {
   const navigate = useNavigate();
 
   const getUser = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user'))
-     
-      const accessToken = user.access_token;
-      console.log(accessToken)
+    try {     
       const url = `${process.env.REACT_APP_BASE_URL}/customer`;
       const response = await axios.get(url, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
         withCredentials: true,
       });
       setCustomerData(response.data.data);
@@ -27,6 +20,10 @@ const Customer = () => {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+  if(!user){
+    navigate('/login')
+  }
     getUser();
   }, []);
 

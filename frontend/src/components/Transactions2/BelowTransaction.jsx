@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BelowTransaction.css'; // Import the CSS file for styling
+import { useNavigate } from 'react-router-dom';
 
 export const BelowTransaction = () => {
   const [transactions, setTransactions] = useState([]);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem('user'));
+       
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/customer/accounts/transactions/below5000`, {
-          headers: {
-            'Authorization': `Bearer ${user.access_token}`,
-          },
           withCredentials: true,
         });
         setTransactions(response.data.data);
@@ -22,6 +20,10 @@ export const BelowTransaction = () => {
       }
     };
 
+    const user = JSON.parse(localStorage.getItem('user')); 
+    if(!user){
+      navigate('/login')
+    }
     fetchTransactions();
   }, []);
 

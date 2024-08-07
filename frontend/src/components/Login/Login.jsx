@@ -11,7 +11,6 @@ const Login = () => {
         if (user) {
             navigate('/')
         }
-
     }, []);
 
     const handleGoogleLogin = () => {
